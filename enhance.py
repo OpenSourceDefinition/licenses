@@ -3,6 +3,7 @@ import openai
 from dotenv import load_dotenv
 import time
 import os
+import logging
 
 def get_structured_license_info(license_name: str, client: openai.AzureOpenAI) -> dict:
     """Get all license information in a single structured query."""
@@ -34,9 +35,20 @@ def get_structured_license_info(license_name: str, client: openai.AzureOpenAI) -
         response_format={ "type": "json_object" }
     )
     
-    return json.loads(response.choices[0].message.content)
+    try:
+        return json.loads(response.choices[0].message.content)
+    except Exception as e:
+        logging.error(f"Error processing {license_name}: {str(e)}")
+        return None
 
 def main():
+    # Set up logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        filename='enhance.log'
+    )
+    
     # Load environment variables from .env file
     load_dotenv()
     
@@ -51,33 +63,47 @@ def main():
         api_version="2024-02-15-preview"
     )
     
+    # Load existing enhanced data if it exists
+    output_file = "licenses_enhanced.json"
     enhanced_licenses = {}
+    if os.path.exists(output_file):
+        with open(output_file, "r") as f:
+            enhanced_licenses = json.load(f)
     
     # Enhance each license
     for license_data in licenses:
         license_title = license_data['title']
-        print(f"Enhancing {license_title}...")
         
-        # Get all information in one query
-        enhancements = get_structured_license_info(license_title, client)
+        # Skip if already processed
+        if license_title in enhanced_licenses:
+            logging.info(f"Skipping {license_title} - already processed")
+            continue
+            
+        logging.info(f"Processing {license_title}...")
         
-        # Keep original data separate from AI enhancements
-        enhanced_licenses[license_title] = {
-            **license_data,
-            "enhanced": {  # New nested structure for AI-generated content
-                **enhancements,
-                "last_updated": time.strftime("%Y-%m-%d")
-            }
-        }
-        
-        # break # only do one license for debugging
-
-        # Add rate limiting delay
+        try:
+            # Get all information in one query
+            enhancements = get_structured_license_info(license_title, client)
+            
+            if enhancements:
+                enhanced_licenses[license_title] = {
+                    **license_data,
+                    "enhanced": {
+                        **enhancements,
+                        "last_updated": time.strftime("%Y-%m-%d")
+                    }
+                }
+                
+                # Save after each successful enhancement
+                with open(output_file, "w") as f:
+                    json.dump(enhanced_licenses, f, indent=2)
+                logging.info(f"Successfully enhanced and saved {license_title}")
+            
+        except Exception as e:
+            logging.error(f"Failed to process {license_title}: {str(e)}")
+            continue
+            
         time.sleep(1)
-    
-    # Save enhanced data
-    with open("licenses_enhanced.json", "w") as f:
-        json.dump(enhanced_licenses, f, indent=2)
 
 if __name__ == "__main__":
     main()
