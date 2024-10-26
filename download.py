@@ -58,6 +58,10 @@ def extract_license_details(license_url):
 
     soup = BeautifulSoup(response.content, 'html.parser')
     
+    # Print just the title as we process it
+    if title_elem := soup.find('h1', class_='entry-title'):
+        print(f"  {title_elem.text.strip()}")
+    
     # Extract category
     category_elem = soup.find('div', class_='post--metadata-group')
     category = category_elem.find('a', class_='term-item').text.strip() if category_elem else "N/A"
@@ -123,35 +127,42 @@ def extract_license_details(license_url):
     return details
 
 def main():
-    base_url = "https://opensource.org/licenses"
+    base_url = "https://opensource.org/license"
     all_license_data = []
-    page_number = 0
+    page_number = 1
 
     while True:
-        page_url = f"{base_url}?page={page_number}"
+        # Construct page URL based on page number
+        page_url = base_url if page_number == 1 else f"{base_url}/page/{page_number}"
+        print(f"\nPage {page_number}: {page_url}")
+        
+        # Try to get the page
+        response = requests.get(page_url)
+        if response.status_code == 404:
+            print(f"Reached end of pages at page {page_number}")
+            break
+
         license_links = get_license_links(page_url)
         
         if not license_links:
-            break  # Exit loop if no more licenses are found
+            print(f"No licenses found on page {page_number}")
+            break
 
         for license_info in license_links:
-            # Use the full link directly from the dictionary
             full_license_url = license_info['link']
             additional_details = extract_license_details(full_license_url)
             if additional_details:
                 license_info.update(additional_details)
                 all_license_data.append(license_info)
-                # Break after the first license for debugging
-                #break
 
-        # Break after the first page for debugging
-        break
+        page_number += 1
 
     # Save all data to a JSON file
     with open('licenses.json', 'w') as json_file:
         json.dump(all_license_data, json_file, indent=4)
 
-    print("License data extracted and saved to licenses.json")
+    print(f"\nComplete! License data extracted from {page_number-1} pages and saved to licenses.json")
+    print(f"Total licenses found: {len(all_license_data)}")
 
 if __name__ == "__main__":
     main()
