@@ -13,21 +13,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Get version
+        id: get_version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      
       - name: Create ZIP file
         run: |
           cd wordpress/plugin
-          zip -r ../../licenses.zip licenses/
+          zip -r licenses-${{ steps.get_version.outputs.version }}.zip licenses/
       
       - name: Upload ZIP as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: licenses
-          path: licenses.zip
+          name: licenses-${{ steps.get_version.outputs.version }}
+          path: wordpress/plugin/licenses-${{ steps.get_version.outputs.version }}.zip
       
       - name: Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
+        permissions:
+          contents: write
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: licenses.zip
+          files: wordpress/plugin/licenses-${{ steps.get_version.outputs.version }}.zip
