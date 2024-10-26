@@ -142,7 +142,7 @@ def main():
                 license_info.update(additional_details)
                 all_license_data.append(license_info)
                 # Break after the first license for debugging
-                break
+                #break
 
         # Break after the first page for debugging
         break
