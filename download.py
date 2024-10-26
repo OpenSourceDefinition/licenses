@@ -57,28 +57,70 @@ def extract_license_details(license_url):
         return None
 
     soup = BeautifulSoup(response.content, 'html.parser')
-    # Debug: Print the HTML content of the detail page
-    print(soup.prettify())
-
-    # Example: Extract additional fields from the detail page
-    # Adjust the selectors based on the actual HTML structure of the detail page
-    additional_info = {
-        'version': soup.find('span', class_='version').text.strip() if soup.find('span', class_='version') else "N/A",
-        'submitted': soup.find('span', class_='submitted').text.strip() if soup.find('span', class_='submitted') else "N/A",
-        'submitter': soup.find('span', class_='submitter').text.strip() if soup.find('span', class_='submitter') else "N/A",
-        'approved': soup.find('span', class_='approved').text.strip() if soup.find('span', class_='approved') else "N/A",
-        'board_minutes_link': soup.find('a', class_='board-minutes')['href'] if soup.find('a', class_='board-minutes') else "N/A",
-        'spdx_short_identifier': soup.find('span', class_='spdx').text.strip() if soup.find('span', class_='spdx') else "N/A",
-        'steward_name': soup.find('span', class_='steward-name').text.strip() if soup.find('span', class_='steward-name') else "N/A",
-        'steward_link': soup.find('a', class_='steward-link')['href'] if soup.find('a', class_='steward-link') else "N/A",
-        'license_link': soup.find('a', class_='license-link')['href'] if soup.find('a', class_='license-link') else "N/A",
-        'license_text': soup.find('div', class_='license-text').text.strip() if soup.find('div', class_='license-text') else "N/A",
+    
+    # Extract category
+    category_elem = soup.find('div', class_='post--metadata-group')
+    category = category_elem.find('a', class_='term-item').text.strip() if category_elem else "N/A"
+    
+    # Extract license details
+    details = {
+        'title': soup.find('h1', class_='entry-title').text.strip() if soup.find('h1', class_='entry-title') else "N/A",
+        'category': category,
+        'version': soup.find('span', class_='license-version').text.replace('Version', '').strip() if soup.find('span', class_='license-version') else "N/A",
+        'submitted_date': None,
+        'submitted_link': None,
+        'submitter': None,
+        'approved_date': None,
+        'board_minutes_link': None,
+        'spdx_identifier': None,
+        'steward': None,
+        'steward_url': None,
+        'osi_approved': False,
+        'license_body': None
     }
 
-    # Debug: Print the extracted additional information
-    print("Extracted additional info:", additional_info)
+    # Extract submission details
+    if submitted_span := soup.find('span', class_='license-release'):
+        if submitted_link := submitted_span.find('a'):
+            details['submitted_date'] = submitted_link.text.strip()
+            details['submitted_link'] = submitted_link['href']
 
-    return additional_info
+    # Extract submitter
+    if submitter_span := soup.find('span', class_='license-submitter'):
+        details['submitter'] = submitter_span.text.replace('Submitter:', '').strip()
+
+    # Extract approval date
+    if approved_span := soup.find('span', class_='license-approved'):
+        details['approved_date'] = approved_span.text.replace('Approved:', '').strip()
+
+    # Extract board minutes link
+    if minutes_span := soup.find('span', class_='license-board-minutes'):
+        if minutes_link := minutes_span.find('a'):
+            details['board_minutes_link'] = minutes_link['href']
+
+    # Extract SPDX identifier
+    if spdx_span := soup.find('span', class_='license-spdx'):
+        details['spdx_identifier'] = spdx_span.text.replace('SPDX short identifier:', '').strip()
+
+    # Extract steward information
+    if steward_span := soup.find('span', class_='license-steward'):
+        if steward_link := steward_span.find('a', class_='term-item'):
+            details['steward'] = steward_link.text.strip()
+
+    # Extract steward URL
+    if steward_url_span := soup.find('span', class_='license-steward-url'):
+        if steward_url_link := steward_url_span.find('a'):
+            details['steward_url'] = steward_url_link['href']
+
+    # Check if OSI approved
+    details['osi_approved'] = bool(soup.find('img', alt='Open Source Initiative Approved License'))
+
+    # Extract license body
+    if license_content := soup.find('div', class_='entry-content post--content license-content'):
+        if license_div := license_content.find('div'):
+            details['license_body'] = license_div.text.strip()
+
+    return details
 
 def main():
     base_url = "https://opensource.org/licenses"
