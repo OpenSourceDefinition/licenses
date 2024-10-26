@@ -12,7 +12,7 @@ def get_license_links(page_url):
 
     soup = BeautifulSoup(response.content, 'html.parser')
     # Debug: Print the HTML content
-    print(soup.prettify())
+    #print(soup.prettify())
 
     # Select all rows in the license table
     license_rows = soup.select('tr')
@@ -45,7 +45,7 @@ def get_license_links(page_url):
                 })
 
     # Debug: Print the found license data
-    print("Found license data:", license_data)
+    #print("Found license data:", license_data)
     
     return license_data
 
@@ -100,7 +100,7 @@ def extract_license_details(license_url):
 
     # Extract SPDX identifier
     if spdx_span := soup.find('span', class_='license-spdx'):
-        details['spdx_identifier'] = spdx_span.text.replace('SPDX short identifier:', '').strip()
+        details['spdx_detail_page'] = spdx_span.text.replace('SPDX short identifier:', '').strip()
 
     # Extract steward information
     if steward_span := soup.find('span', class_='license-steward'):
