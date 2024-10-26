@@ -67,12 +67,12 @@ def extract_license_details(license_url):
         'title': soup.find('h1', class_='entry-title').text.strip() if soup.find('h1', class_='entry-title') else "N/A",
         'category': category,
         'version': soup.find('span', class_='license-version').text.replace('Version', '').strip() if soup.find('span', class_='license-version') else "N/A",
-        'submitted_date': None,
-        'submitted_link': None,
-        'submitter': None,
-        'approved_date': None,
-        'board_minutes_link': None,
-        'spdx_identifier': None,
+        'osi_submitted_date': None,
+        'osi_submitted_link': None,
+        'osi_submitter': None,
+        'osi_approved_date': None,
+        'osi_board_minutes_link': None,
+        'spdx_detail_page': None,
         'steward': None,
         'steward_url': None,
         'osi_approved': False,
@@ -82,21 +82,21 @@ def extract_license_details(license_url):
     # Extract submission details
     if submitted_span := soup.find('span', class_='license-release'):
         if submitted_link := submitted_span.find('a'):
-            details['submitted_date'] = submitted_link.text.strip()
-            details['submitted_link'] = submitted_link['href']
+            details['osi_submitted_date'] = submitted_link.text.strip()
+            details['osi_submitted_link'] = submitted_link['href']
 
     # Extract submitter
     if submitter_span := soup.find('span', class_='license-submitter'):
-        details['submitter'] = submitter_span.text.replace('Submitter:', '').strip()
+        details['osi_submitter'] = submitter_span.text.replace('Submitter:', '').strip()
 
     # Extract approval date
     if approved_span := soup.find('span', class_='license-approved'):
-        details['approved_date'] = approved_span.text.replace('Approved:', '').strip()
+        details['osi_approved_date'] = approved_span.text.replace('Approved:', '').strip()
 
     # Extract board minutes link
     if minutes_span := soup.find('span', class_='license-board-minutes'):
         if minutes_link := minutes_span.find('a'):
-            details['board_minutes_link'] = minutes_link['href']
+            details['osi_board_minutes_link'] = minutes_link['href']
 
     # Extract SPDX identifier
     if spdx_span := soup.find('span', class_='license-spdx'):
