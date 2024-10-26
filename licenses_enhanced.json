@@ -1,0 +1,90 @@
+{
+  "Los Alamos National Labs BSD-3 Variant": {
+    "link": "https://opensource.org/license/los-alamos-national-labs-bsd-3-variant",
+    "slug": "los-alamos-national-labs-bsd-3-variant",
+    "title": "Los Alamos National Labs BSD-3 Variant",
+    "spdx": "",
+    "category": "Non-Reusable",
+    "version": "N/A",
+    "osi_submitted_date": "June 26, 2024",
+    "osi_submitted_link": "https://lists.opensource.org/pipermail/license-review_lists.opensource.org/2024-June/005490.html",
+    "osi_submitter": "Pettinger, Adam L",
+    "osi_approved_date": "September 20, 2024",
+    "osi_board_minutes_link": "https://opensource.org/meeting-minutes/2024-09-20",
+    "spdx_detail_page": null,
+    "steward": null,
+    "steward_url": null,
+    "osi_approved": true,
+    "license_body": "Copyright (c) XXXX, Los Alamos National Security, LLC\nAll rights reserved.\nCopyright XXXX. Los Alamos National Security, LLC. This software was produced under U.S. Government contract DE-AC52-06NA25396 for Los Alamos National Laboratory (LANL), which is operated by Los Alamos National Security, LLC for the U.S. Department of Energy. The U.S. Government has rights to use, reproduce, and distribute this software. NEITHER THE GOVERNMENT NOR LOS ALAMOS NATIONAL SECURITY, LLC MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LIABILITY FOR THE USE OF THIS SOFTWARE. If software is modified to produce derivative works, such modified software should be clearly marked, so as not to confuse it with the version available from LANL.\nAdditionally, redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\nRedistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\nRedistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\nNeither the name of Los Alamos National Security, LLC, Los Alamos National Laboratory, LANL, the U.S. Government, nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY LOS ALAMOS NATIONAL SECURITY, LLC AND CONTRIBUTORS \u201cAS IS\u201d AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL LOS ALAMOS NATIONAL SECURITY, LLC OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.",
+    "enhanced": {
+      "description": "The Los Alamos National Labs BSD-3 Variant is a permissive software license based on the BSD-3-Clause license. It allows for free use, modification, and distribution of software with additional obligations for government use.",
+      "review": "The variant maintains most of the typical BSD-3-Clause permissive nature but adds specific conditions relating to government use and publication of documents based on the software.",
+      "key_features": [
+        "Permissive terms",
+        "Copyright notice preservation required",
+        "Commercial use allowed",
+        "Modification allowed",
+        "Private use allowed",
+        "Distribution allowed",
+        "Additional conditions for government use"
+      ],
+      "related_licenses": [
+        {
+          "name": "BSD-3-Clause",
+          "relation": "Base license",
+          "comparison": "Adds specific government-related clauses"
+        },
+        {
+          "name": "MIT License",
+          "relation": "Similar permissive license",
+          "comparison": "MIT does not include government-related clauses"
+        }
+      ],
+      "common_use_cases": [
+        "Government-funded projects",
+        "Academic research software",
+        "Open source contributions",
+        "Collaborative scientific computing"
+      ],
+      "industry_adoption": {
+        "popularity_level": "medium",
+        "typical_users": [
+          "Research institutions",
+          "Government agencies",
+          "University projects",
+          "Open source communities"
+        ],
+        "notable_projects": [
+          {
+            "name": "OpenMC",
+            "description": "Monte Carlo particle transport code"
+          },
+          {
+            "name": "LANL IC",
+            "description": "Computational support software for research"
+          }
+        ]
+      },
+      "compliance_requirements": [
+        {
+          "requirement": "Include license text",
+          "explanation": "Must include the full license text in all copies"
+        },
+        {
+          "requirement": "Preserve copyright notice",
+          "explanation": "Must maintain the original copyright notice in all copies"
+        },
+        {
+          "requirement": "Acknowledge government support",
+          "explanation": "Must include specific notices if software is used in publications"
+        }
+      ],
+      "resources": {
+        "wikipedia_url": "https://en.wikipedia.org/wiki/BSD_licenses",
+        "official_url": "https://fedoraproject.org/wiki/Licensing/LANL_BSD",
+        "spdx_identifier": "BSD-3-Clause-LBNL"
+      },
+      "last_updated": "2024-10-26"
+    }
+  }
+}
