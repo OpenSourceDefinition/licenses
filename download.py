@@ -106,10 +106,10 @@ def main():
         break
 
     # Save all data to a JSON file
-    with open('detailed_licenses.json', 'w') as json_file:
+    with open('licenses.json', 'w') as json_file:
         json.dump(all_license_data, json_file, indent=4)
 
-    print("License data extracted and saved to detailed_licenses.json")
+    print("License data extracted and saved to licenses.json")
 
 if __name__ == "__main__":
     main()
