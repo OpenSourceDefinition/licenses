@@ -15,10 +15,16 @@ jobs:
       
       - name: Get version
         id: get_version
-        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          else
+            echo "version=dev" >> $GITHUB_OUTPUT
+          fi
       
       - name: Create ZIP file
         run: |
+          mkdir -p wordpress/plugin
           cd wordpress/plugin
           zip -r licenses-${{ steps.get_version.outputs.version }}.zip licenses/
       
