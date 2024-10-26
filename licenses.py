@@ -11,11 +11,14 @@ def get_license_links(page_url):
         return []
 
     soup = BeautifulSoup(response.content, 'html.parser')
-    # Debug: Print the HTML content
-    #print(soup.prettify())
-
-    # Select all rows in the license table
-    license_rows = soup.select('tr')
+    
+    # Specifically target the license table
+    license_table = soup.find('table', class_='license-table')
+    if not license_table:
+        return []
+        
+    # Only select rows from the license table
+    license_rows = license_table.select('tr')
 
     license_data = []
     for row in license_rows:
@@ -129,6 +132,7 @@ def extract_license_details(license_url):
 def main():
     base_url = "https://opensource.org/license"
     all_license_data = []
+    seen_slugs = set()  # Track unique licenses by slug
     page_number = 1
 
     while True:
@@ -149,6 +153,12 @@ def main():
             break
 
         for license_info in license_links:
+            # Skip if we've already seen this license
+            if license_info['slug'] in seen_slugs:
+                print(f"  Skipping duplicate license: {license_info['title']}")
+                continue
+                
+            seen_slugs.add(license_info['slug'])
             full_license_url = license_info['link']
             additional_details = extract_license_details(full_license_url)
             if additional_details:
