@@ -63,9 +63,16 @@ def extract_license_details(license_url):
     # Example: Extract additional fields from the detail page
     # Adjust the selectors based on the actual HTML structure of the detail page
     additional_info = {
-        'license_name': soup.find('h1', class_='entry-title').text.strip() if soup.find('h1', class_='entry-title') else "N/A",
+        'version': soup.find('span', class_='version').text.strip() if soup.find('span', class_='version') else "N/A",
+        'submitted': soup.find('span', class_='submitted').text.strip() if soup.find('span', class_='submitted') else "N/A",
+        'submitter': soup.find('span', class_='submitter').text.strip() if soup.find('span', class_='submitter') else "N/A",
+        'approved': soup.find('span', class_='approved').text.strip() if soup.find('span', class_='approved') else "N/A",
+        'board_minutes_link': soup.find('a', class_='board-minutes')['href'] if soup.find('a', class_='board-minutes') else "N/A",
+        'spdx_short_identifier': soup.find('span', class_='spdx').text.strip() if soup.find('span', class_='spdx') else "N/A",
+        'steward_name': soup.find('span', class_='steward-name').text.strip() if soup.find('span', class_='steward-name') else "N/A",
+        'steward_link': soup.find('a', class_='steward-link')['href'] if soup.find('a', class_='steward-link') else "N/A",
+        'license_link': soup.find('a', class_='license-link')['href'] if soup.find('a', class_='license-link') else "N/A",
         'license_text': soup.find('div', class_='license-text').text.strip() if soup.find('div', class_='license-text') else "N/A",
-        # Add more fields as needed
     }
 
     # Debug: Print the extracted additional information

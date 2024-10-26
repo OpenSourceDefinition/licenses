@@ -13,9 +13,6 @@ def get_license_links(page_url):
         return []
 
     soup = BeautifulSoup(response.content, 'html.parser')
-    # Debug: Print the HTML content
-    print(soup.prettify())
-
     # Select all rows in the license table
     license_rows = soup.select('tr')
 
@@ -46,41 +43,23 @@ def get_license_links(page_url):
                     'category': category
                 })
 
-    # Debug: Print the found license data
-    print("Found license data:", license_data)
-    
     return license_data
 
 def extract_license_details(license_url):
-    """Extract details from a license page."""
+    """Extract additional details from the license detail page."""
     response = requests.get(license_url)
     if response.status_code != 200:
         print(f"Failed to retrieve {license_url}")
         return None
 
     soup = BeautifulSoup(response.content, 'html.parser')
-    
-    # Extract details (adjust selectors based on actual HTML structure)
-    license_name = soup.find('h1').text.strip()
-    approval_date = soup.find('span', class_='approval-date').text.strip() if soup.find('span', class_='approval-date') else "N/A"
-    spdx_identifier = soup.find('span', class_='spdx-identifier').text.strip() if soup.find('span', class_='spdx-identifier') else "N/A"
-    board_minutes_link = soup.find('a', text='Board Minutes')['href'] if soup.find('a', text='Board Minutes') else "N/A"
-    version = soup.find('span', class_='version').text.strip() if soup.find('span', class_='version') else "N/A"
-    submitted_date = soup.find('span', class_='submitted-date').text.strip() if soup.find('span', class_='submitted-date') else "N/A"
-    submitter = soup.find('span', class_='submitter').text.strip() if soup.find('span', class_='submitter') else "N/A"
-    license_text = soup.find('div', class_='license-text').text.strip() if soup.find('div', class_='license-text') else "N/A"
-    
-    return {
-        'name': license_name,
-        'url': license_url,
-        'approval_date': approval_date,
-        'spdx_identifier': spdx_identifier,
-        'board_minutes_link': board_minutes_link,
-        'version': version,
-        'submitted_date': submitted_date,
-        'submitter': submitter,
-        'license_text': license_text
+    # Example: Extract additional fields from the detail page
+    # Adjust the selectors based on the actual HTML structure of the detail page
+    additional_info = {
+        'example_field': soup.find('div', class_='example-class').text.strip() if soup.find('div', class_='example-class') else "N/A"
     }
+
+    return additional_info
 
 def main():
     all_license_data = []
@@ -96,9 +75,10 @@ def main():
         for license_info in license_links:
             # Use the full link directly from the dictionary
             full_license_url = license_info['link']
-            license_data = extract_license_details(full_license_url)
-            if license_data:
-                all_license_data.append(license_data)
+            additional_details = extract_license_details(full_license_url)
+            if additional_details:
+                license_info.update(additional_details)
+                all_license_data.append(license_info)
                 # Break after the first license for debugging
                 break
 
@@ -109,7 +89,7 @@ def main():
     with open('licenses.json', 'w') as json_file:
         json.dump(all_license_data, json_file, indent=4)
 
-    print("License/s extracted and saved to licenses.json")
+    print("First license data extracted and saved to first_license_debug.json")
 
 if __name__ == "__main__":
     main()
