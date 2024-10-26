@@ -1,0 +1,28 @@
+.license-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.license-grid article {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.entry-thumbnail img {
+    max-width: 100%;
+    height: auto;
+}
+
+.entry-meta {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+}
+
+.entry-meta span {
+    display: block;
+    margin-bottom: 0.5rem;
+}
