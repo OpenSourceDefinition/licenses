@@ -3,7 +3,7 @@
 if (!defined('ABSPATH')) exit;
 
 class License_Populator {
-    private $json_file = 'data/licenses_original.json';
+    private $json_file = 'data/licenses.json';
     private $version = '1.0.0';
     private $table_name;
     
@@ -102,57 +102,60 @@ class License_Populator {
         global $wpdb;
         $table_name = $wpdb->prefix . 'licenses';
 
-        // Format arrays into JSON
-        $key_features = isset($license_data['enhanced']['key_features']) 
-            ? json_encode($license_data['enhanced']['key_features'])
+        // Get enhanced data with fallback to empty array
+        $enhanced = isset($license_data['enhanced']) ? $license_data['enhanced'] : [];
+
+        // Format arrays into JSON with null checks
+        $key_features = isset($enhanced['key_features']) 
+            ? json_encode($enhanced['key_features'])
             : '';
 
-        $related_licenses = isset($license_data['enhanced']['related_licenses']) 
-            ? json_encode($license_data['enhanced']['related_licenses'])
+        $related_licenses = isset($enhanced['related_licenses']) 
+            ? json_encode($enhanced['related_licenses'])
             : '';
 
-        $common_use_cases = isset($license_data['enhanced']['common_use_cases']) 
-            ? json_encode($license_data['enhanced']['common_use_cases'])
+        $common_use_cases = isset($enhanced['common_use_cases']) 
+            ? json_encode($enhanced['common_use_cases'])
             : '';
 
-        $industry_adoption = isset($license_data['enhanced']['industry_adoption']) 
-            ? json_encode($license_data['enhanced']['industry_adoption'])
+        $industry_adoption = isset($enhanced['industry_adoption']) 
+            ? json_encode($enhanced['industry_adoption'])
             : '';
 
-        $compliance_requirements = isset($license_data['enhanced']['compliance_requirements']) 
-            ? json_encode($license_data['enhanced']['compliance_requirements'])
+        $compliance_requirements = isset($enhanced['compliance_requirements']) 
+            ? json_encode($enhanced['compliance_requirements'])
             : '';
 
-        $resources = isset($license_data['enhanced']['resources']) 
-            ? json_encode($license_data['enhanced']['resources'])
+        $resources = isset($enhanced['resources']) 
+            ? json_encode($enhanced['resources'])
             : '';
 
         $data = array(
-            'title' => $license_data['title'],
-            'slug' => $license_data['slug'],
-            'link' => $license_data['link'],
-            'spdx' => $license_data['spdx'],
-            'category' => $license_data['category'],
-            'version' => $license_data['version'],
-            'osi_submitted_date' => $license_data['osi_submitted_date'],
-            'osi_submitted_link' => $license_data['osi_submitted_link'],
-            'osi_submitter' => $license_data['osi_submitter'],
-            'osi_approved_date' => $license_data['osi_approved_date'],
-            'osi_board_minutes_link' => $license_data['osi_board_minutes_link'],
-            'spdx_detail_page' => $license_data['spdx_detail_page'],
-            'steward' => $license_data['steward'],
-            'steward_url' => $license_data['steward_url'],
-            'osi_approved' => $license_data['osi_approved'] ? 1 : 0,
-            'license_body' => $license_data['license_body'],
-            'description' => $license_data['enhanced']['description'],
-            'review' => $license_data['enhanced']['review'],
+            'title' => $license_data['title'] ?? '',
+            'slug' => $license_data['slug'] ?? '',
+            'link' => $license_data['link'] ?? '',
+            'spdx' => $license_data['spdx'] ?? '',
+            'category' => $license_data['category'] ?? '',
+            'version' => $license_data['version'] ?? '',
+            'osi_submitted_date' => $license_data['osi_submitted_date'] ?? '',
+            'osi_submitted_link' => $license_data['osi_submitted_link'] ?? '',
+            'osi_submitter' => $license_data['osi_submitter'] ?? '',
+            'osi_approved_date' => $license_data['osi_approved_date'] ?? '',
+            'osi_board_minutes_link' => $license_data['osi_board_minutes_link'] ?? '',
+            'spdx_detail_page' => $license_data['spdx_detail_page'] ?? '',
+            'steward' => $license_data['steward'] ?? '',
+            'steward_url' => $license_data['steward_url'] ?? '',
+            'osi_approved' => isset($license_data['osi_approved']) ? (int)$license_data['osi_approved'] : 0,
+            'license_body' => $license_data['license_body'] ?? '',
+            'description' => $enhanced['description'] ?? '',
+            'review' => $enhanced['review'] ?? '',
             'key_features' => $key_features,
             'related_licenses' => $related_licenses,
             'common_use_cases' => $common_use_cases,
             'industry_adoption' => $industry_adoption,
             'compliance_requirements' => $compliance_requirements,
             'resources' => $resources,
-            'last_updated' => $license_data['enhanced']['last_updated'],
+            'last_updated' => $license_data['enhanced']['last_updated'] ?? '',
             'created_at' => current_time('mysql'),
             'updated_at' => current_time('mysql')
         );
