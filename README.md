@@ -33,7 +33,7 @@ The script generates a JSON file containing an array of license objects. Here's 
 "spdx": "BSD-1-Clause",
 "category": "Other/Miscellaneous",
 "version": "N/A",
-"osi_approved": true,
+"osi_certified": true,
 "license_body": "Copyright (c) [Year][Name of Organization] [All rights reserved].\n
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:\n
@@ -55,12 +55,12 @@ THIS SOFTWARE IS PROVIDED BY [Name of Organization] \"AS IS\"..."
 | osi_submitted_date | Date the license was submitted to OSI |
 | osi_submitted_link | Link to the submission discussion |
 | osi_submitter | Name of person who submitted the license |
-| osi_approved_date | Date the license was approved by OSI |
+| osi_certified_date | Date the license was certified by OSI |
 | osi_board_minutes_link | Link to board meeting minutes for approval |
 | spdx_detail_page | SPDX identifier used in detail pages |
 | steward | Organization maintaining the license |
 | steward_url | URL to the steward's license page |
-| osi_approved | Boolean indicating if OSI approved |
+| osi_certified | Boolean indicating if OSI certified |
 | license_body | Full text of the license |
 
 ## License

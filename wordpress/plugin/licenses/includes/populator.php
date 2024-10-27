@@ -93,12 +93,12 @@ class License_Populator {
             'osi_submitted_date' => $license_data['osi_submitted_date'] ?? '',
             'osi_submitted_link' => $license_data['osi_submitted_link'] ?? '',
             'osi_submitter' => $license_data['osi_submitter'] ?? '',
-            'osi_approved_date' => $license_data['osi_approved_date'] ?? '',
+            'osi_certified_date' => $license_data['osi_certified_date'] ?? '',
             'osi_board_minutes_link' => $license_data['osi_board_minutes_link'] ?? '',
             'spdx_detail_page' => $license_data['spdx_detail_page'] ?? '',
             'steward' => $license_data['steward'] ?? '',
             'steward_url' => $license_data['steward_url'] ?? '',
-            'osi_approved' => isset($license_data['osi_approved']) ? (int)$license_data['osi_approved'] : 0,
+            'osi_certified' => isset($license_data['osi_certified']) ? (int)$license_data['osi_certified'] : 0,
         );
 
         // Enhanced meta fields

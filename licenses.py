@@ -77,12 +77,12 @@ def extract_license_details(license_url):
         'osi_submitted_date': None,
         'osi_submitted_link': None,
         'osi_submitter': None,
-        'osi_approved_date': None,
+        'osi_certified_date': None,
         'osi_board_minutes_link': None,
         'spdx_detail_page': None,
         'steward': None,
         'steward_url': None,
-        'osi_approved': False,
+        'osi_certified': False,
         'license_body': None
     }
 
@@ -97,8 +97,8 @@ def extract_license_details(license_url):
         details['osi_submitter'] = submitter_span.text.replace('Submitter:', '').strip()
 
     # Extract approval date
-    if approved_span := soup.find('span', class_='license-approved'):
-        details['osi_approved_date'] = approved_span.text.replace('Approved:', '').strip()
+    if certified_span := soup.find('span', class_='license-approved'):
+        details['osi_certified_date'] = certified_span.text.replace('Approved:', '').strip()
 
     # Extract board minutes link
     if minutes_span := soup.find('span', class_='license-board-minutes'):
@@ -119,8 +119,8 @@ def extract_license_details(license_url):
         if steward_url_link := steward_url_span.find('a'):
             details['steward_url'] = steward_url_link['href']
 
-    # Check if OSI approved
-    details['osi_approved'] = bool(soup.find('img', alt='Open Source Initiative Approved License'))
+    # Check if OSI certified
+    details['osi_certified'] = bool(soup.find('img', alt='Open Source Initiative Approved License'))
 
     # Extract license body
     if license_content := soup.find('div', class_='entry-content post--content license-content'):
