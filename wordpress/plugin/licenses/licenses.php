@@ -27,17 +27,83 @@ if (!defined('ABSPATH')) exit;
 // Include the License Populator class
 require_once plugin_dir_path(__FILE__) . 'includes/populator.php';
 
+// Add taxonomy registration function
+function register_license_taxonomies() {
+    // Register License Categories
+    register_taxonomy('license_category', 'license', array(
+        'hierarchical'      => true,
+        'labels'           => array(
+            'name'              => _x('License Categories', 'taxonomy general name'),
+            'singular_name'     => _x('License Category', 'taxonomy singular name'),
+            'menu_name'         => __('Categories'),
+        ),
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array('slug' => 'license-category'),
+    ));
+
+    // Register License Tags
+    register_taxonomy('license_tag', 'license', array(
+        'hierarchical'      => false,
+        'labels'           => array(
+            'name'              => _x('License Tags', 'taxonomy general name'),
+            'singular_name'     => _x('License Tag', 'taxonomy singular name'),
+            'menu_name'         => __('Tags'),
+        ),
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array('slug' => 'license-tag'),
+    ));
+}
+add_action('init', 'register_license_taxonomies');
+
 // Register activation hook
 register_activation_hook(__FILE__, 'osl_activate');
 function osl_activate() {
-    // Register post type first so we can add posts
+    // Register post type first
     register_license_post_type();
+    
+    // Register taxonomies
+    register_license_taxonomies();
+    
+    // Create default terms
+    $default_categories = array(
+        'International' => 'Licenses with international focus or origin',
+        'Non-Reusable' => 'Licenses that cannot be reused',
+        'Miscellaneous' => 'Other miscellaneous licenses',
+        'Retired' => 'Voluntarily retired licenses',
+        'Popular' => 'Widely used licenses with strong community support',
+        'Redundant' => 'Licenses redundant with more popular alternatives',
+        'Special' => 'Licenses for special purposes',
+        'Superseded' => 'Licenses that have been superseded by newer versions',
+        'Uncategorized' => 'Licenses without a specific category'
+    );
+
+    foreach ($default_categories as $category => $description) {
+        if (!term_exists($category, 'license_category')) {
+            wp_insert_term(
+                $category,
+                'license_category',
+                array('description' => $description)
+            );
+        }
+    }
+
+    // Create OSI Certified tag
+    if (!term_exists('osi-certified', 'license_tag')) {
+        wp_insert_term(
+            'osi-certified',
+            'license_tag',
+            array('description' => 'Licenses certified by the Open Source Initiative')
+        );
+    }
     
     // Initialize the license populator
     $populator = new License_Populator();
     $result = $populator->setup_and_populate();
     
-    // Add error logging for debugging
     if (!$result) {
         error_log('OSL Plugin: Failed to populate licenses during activation');
     }
@@ -115,7 +181,7 @@ function register_license_post_type() {
         'menu_position' => 50,
         'menu_icon' => 'dashicons-media-document',
         'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
-        'taxonomies' => array('category', 'post_tag'),
+        'taxonomies' => array('license_category', 'license_tag'), // Update this line
         'labels' => array(
             'name' => 'Licenses',
             'singular_name' => 'License',

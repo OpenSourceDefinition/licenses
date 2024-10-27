@@ -79,9 +79,21 @@ class License_Populator {
 
         $post_id = wp_insert_post($post_data);
 
-        if (is_wp_error($post_id)) {
-            error_log('Failed to create license CPT: ' . $post_id->get_error_message());
-            return false;
+        if ($post_id && !is_wp_error($post_id)) {
+            // Handle category mapping
+            if (!empty($license_data['category'])) {
+                $category = trim($license_data['category']);
+                $mapped_category = $this->map_category($category);
+                wp_set_object_terms($post_id, $mapped_category, 'license_category');
+            } else {
+                // Set as Uncategorized if no category provided
+                wp_set_object_terms($post_id, 'Uncategorized', 'license_category');
+            }
+
+            // Handle OSI certification tag
+            if (!empty($license_data['osi_certified']) && $license_data['osi_certified'] === true) {
+                wp_set_object_terms($post_id, 'osi-certified', 'license_tag');
+            }
         }
 
         // Basic meta fields
@@ -121,5 +133,25 @@ class License_Populator {
         }
 
         return true;
+    }
+
+    /**
+     * Maps original categories to our standardized categories
+     */
+    private function map_category($original_category) {
+        $category_mapping = array(
+            'International' => 'International',
+            'Non-Reusable' => 'Non-Reusable',
+            'Other/Miscellaneous' => 'Miscellaneous',
+            'Voluntarily retired' => 'Retired',
+            'Popular / Strong Community' => 'Popular',
+            'Redundant with more popular' => 'Redundant',
+            'Special Purpose' => 'Special',
+            'Superseded' => 'Superseded'
+        );
+
+        return isset($category_mapping[$original_category]) 
+            ? $category_mapping[$original_category] 
+            : 'Uncategorized';
     }
 }
