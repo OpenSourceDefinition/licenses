@@ -99,30 +99,6 @@ function register_license_post_type() {
 }
 add_action('init', 'register_license_post_type');
 
-// Add template loading logic
-function license_template_loader($template) {
-    if (is_post_type_archive('license')) {
-        $theme_file = locate_template(array('archive-license.php'));
-        if ($theme_file) {
-            return $theme_file;
-        } else {
-            return plugin_dir_path(__FILE__) . 'templates/archive-license.php';
-        }
-    }
-    
-    if (is_singular('license')) {
-        $theme_file = locate_template(array('single-license.php'));
-        if ($theme_file) {
-            return $theme_file;
-        } else {
-            return plugin_dir_path(__FILE__) . 'templates/single-license.php';
-        }
-    }
-    
-    return $template;
-}
-#add_filter('template_include', 'license_template_loader');
-
 function license_manager_styles() {
     wp_enqueue_style(
         'license-manager-styles',
