@@ -19,7 +19,7 @@ python licenses.py
 This will:
  - Download all license pages from opensource.org
  - Extract detailed information for each license
- - Save the results to licenses.json
+ - Save the results to licenses_original.json
 
 ## Output Format
 

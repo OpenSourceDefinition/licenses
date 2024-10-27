@@ -53,7 +53,7 @@ def main():
     load_dotenv()
     
     # Load existing license data
-    with open("licenses.json", "r") as f:
+    with open("licenses_original.json", "r") as f:
         licenses = json.load(f)
     
     # Initialize OpenAI client (replaces AzureOpenAI initialization)
@@ -64,7 +64,7 @@ def main():
     )
     
     # Load existing enhanced data if it exists
-    output_file = "licenses_enhanced.json"
+    output_file = "licenses.json"
     enhanced_licenses = {}
     if os.path.exists(output_file):
         with open(output_file, "r") as f:

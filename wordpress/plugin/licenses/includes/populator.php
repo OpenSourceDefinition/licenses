@@ -3,7 +3,7 @@
 if (!defined('ABSPATH')) exit;
 
 class License_Populator {
-    private $json_file = 'data/licenses.json';
+    private $json_file = 'data/licenses_original.json';
     private $version = '1.0.0';
     private $table_name;
     
@@ -69,7 +69,7 @@ class License_Populator {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
     }
-    
+
     public function populate_licenses() {
         $json_path = plugin_dir_path(dirname(__FILE__)) . $this->json_file;
         

@@ -168,10 +168,10 @@ def main():
         page_number += 1
 
     # Save all data to a JSON file
-    with open('licenses.json', 'w') as json_file:
+    with open('licenses_original.json', 'w') as json_file:
         json.dump(all_license_data, json_file, indent=4)
 
-    print(f"\nComplete! License data extracted from {page_number-1} pages and saved to licenses.json")
+    print(f"\nComplete! License data extracted from {page_number-1} pages and saved to licenses_original.json")
     print(f"Total licenses found: {len(all_license_data)}")
 
 if __name__ == "__main__":
