@@ -117,7 +117,7 @@ function get_license_list_pattern() {
     <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":250}} -->
     <div class="wp-block-query">
         <!-- wp:post-template -->
-            <!-- wp:group {"className":"license-list-item","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
+            <!-- wp:group {"className":"license-list-item","layout":{"type":"flex","flexWrap":"nowrap"}} -->
             <div class="wp-block-group license-list-item">
                 <!-- wp:post-title {"level":3,"isLink":true} /-->
                 <!-- wp:post-excerpt {"showMoreOnNewLine":false,"excerptLength":20} /-->
