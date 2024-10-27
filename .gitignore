@@ -1,3 +1,4 @@
 .env
 enhance.log
 *.zip
+.DS_Store
