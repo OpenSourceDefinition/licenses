@@ -24,6 +24,9 @@ jobs:
       
       - name: Create ZIP file
         run: |
+          # Copy licenses.json to plugin's data directory
+          cp licenses.json wordpress/plugin/licenses/data/
+          # Create ZIP
           cd wordpress/plugin/licenses
           zip -r ../../../licenses-${{ steps.get_version.outputs.version }}.zip .
           # Debug: Let's see where the file ended up
