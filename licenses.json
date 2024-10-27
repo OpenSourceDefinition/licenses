@@ -1226,7 +1226,6 @@
       "key_features": [
         "Specific to PHP project",
         "Restricts use of PHP name",
-        "Not OSI-certified",
         "Allows modification",
         "Allows distribution"
       ],
