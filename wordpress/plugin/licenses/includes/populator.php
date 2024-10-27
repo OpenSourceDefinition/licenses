@@ -145,9 +145,38 @@ class License_Populator {
                 wp_set_object_terms($post_id, 'Uncategorized', 'license_category');
             }
 
-            // Handle OSI certification tag
-            if (!empty($license_data['osi_certified']) && $license_data['osi_certified'] === true) {
-                wp_set_object_terms($post_id, 'osi-certified', 'license_tag', true);
+            // Debug the raw data
+            if (defined('WP_CLI') && WP_CLI) {
+                WP_CLI::log("License name: " . $license_name);
+                WP_CLI::log("Raw license data type: " . gettype($license_data));
+                WP_CLI::log("Raw license data: ");
+                WP_CLI::log(print_r($license_data, true));
+            }
+
+            // Check OSI certification with isset
+            $is_osi_certified = isset($license_data['osi_certified']) ? 
+                filter_var($license_data['osi_certified'], FILTER_VALIDATE_BOOLEAN) : false;
+
+            if (defined('WP_CLI') && WP_CLI) {
+                WP_CLI::log("Is OSI certified: " . var_export($is_osi_certified, true));
+            }
+
+            if ($is_osi_certified) {
+                // Create term if it doesn't exist
+                if (!term_exists('osi-certified', 'license_tag')) {
+                    wp_insert_term('OSI Certified', 'license_tag', array('slug' => 'osi-certified'));
+                }
+                
+                // Set the term
+                $result = wp_set_object_terms($post_id, 'osi-certified', 'license_tag', true);
+                
+                if (defined('WP_CLI') && WP_CLI) {
+                    if (is_wp_error($result)) {
+                        WP_CLI::warning("Error setting term: " . $result->get_error_message());
+                    } else {
+                        WP_CLI::success("OSI certified tag set successfully");
+                    }
+                }
             }
         }
 
