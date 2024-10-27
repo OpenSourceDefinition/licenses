@@ -22,28 +22,53 @@ class License_Populator {
     /**
      * Cleans up existing license data
      */
-    private function cleanup_existing_data() {
-        // Get all license posts
-        $existing_licenses = get_posts([
-            'post_type' => 'license',
-            'numberposts' => -1,
-            'post_status' => 'any'
-        ]);
+    public function cleanup_existing_data() {
+        global $wpdb;
 
-        // Delete each license post (this will also delete associated meta)
-        foreach ($existing_licenses as $license) {
-            wp_delete_post($license->ID, true);
+        try {
+            // 1. First remove all term relationships
+            $wpdb->query("DELETE FROM {$wpdb->term_relationships} WHERE object_id IN (
+                SELECT ID FROM {$wpdb->posts} WHERE post_type = 'license'
+            )");
+
+            // 2. Delete all license posts one by one
+            $existing_licenses = $wpdb->get_col(
+                $wpdb->prepare(
+                    "SELECT ID FROM {$wpdb->posts} WHERE post_type = %s",
+                    'license'
+                )
+            );
+
+            foreach ($existing_licenses as $license_id) {
+                wp_delete_post($license_id, true);
+            }
+
+            // 3. Clean up taxonomies directly through database
+            $wpdb->query($wpdb->prepare(
+                "DELETE tt, t FROM {$wpdb->term_taxonomy} tt 
+                LEFT JOIN {$wpdb->terms} t ON t.term_id = tt.term_id 
+                WHERE tt.taxonomy = %s OR tt.taxonomy = %s",
+                'license_category',
+                'license_tag'
+            ));
+
+            // 4. Clean up any orphaned postmeta
+            $wpdb->query($wpdb->prepare(
+                "DELETE pm FROM {$wpdb->postmeta} pm 
+                LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id 
+                WHERE p.ID IS NULL OR p.post_type = %s",
+                'license'
+            ));
+
+        } catch (Exception $e) {
+            error_log('License cleanup error: ' . $e->getMessage());
+            if (defined('WP_CLI') && WP_CLI) {
+                WP_CLI::error('License cleanup failed: ' . $e->getMessage());
+            }
+            return false;
         }
 
-        // Clean up taxonomies
-        $terms = get_terms([
-            'taxonomy' => ['license_category', 'license_tag'],
-            'hide_empty' => false,
-        ]);
-
-        foreach ($terms as $term) {
-            wp_delete_term($term->term_id, $term->taxonomy);
-        }
+        return true;
     }
 
     public function populate_licenses() {
