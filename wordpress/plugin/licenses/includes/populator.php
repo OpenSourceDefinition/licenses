@@ -147,10 +147,10 @@ class License_Populator {
 
             // Debug the raw data
             if (defined('WP_CLI') && WP_CLI) {
-                WP_CLI::log("License name: " . $license_name);
-                WP_CLI::log("Raw license data type: " . gettype($license_data));
-                WP_CLI::log("Raw license data: ");
-                WP_CLI::log(print_r($license_data, true));
+                # WP_CLI::log("License name: " . $license_name);
+                # WP_CLI::log("Raw license data type: " . gettype($license_data));
+                # WP_CLI::log("Raw license data: ");
+                # WP_CLI::log(print_r($license_data, true));
             }
 
             // Check OSI certification with isset
@@ -158,7 +158,7 @@ class License_Populator {
                 filter_var($license_data['osi_certified'], FILTER_VALIDATE_BOOLEAN) : false;
 
             if (defined('WP_CLI') && WP_CLI) {
-                WP_CLI::log("Is OSI certified: " . var_export($is_osi_certified, true));
+                # WP_CLI::log("Is OSI certified: " . var_export($is_osi_certified, true));
             }
 
             if ($is_osi_certified) {
@@ -174,7 +174,7 @@ class License_Populator {
                     if (is_wp_error($result)) {
                         WP_CLI::warning("Error setting term: " . $result->get_error_message());
                     } else {
-                        WP_CLI::success("OSI certified tag set successfully");
+                        # WP_CLI::success("OSI certified tag set successfully");
                     }
                 }
             }
