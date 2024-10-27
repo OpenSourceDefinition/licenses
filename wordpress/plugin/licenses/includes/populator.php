@@ -20,27 +20,47 @@ class License_Populator {
         $json_path = plugin_dir_path(dirname(__FILE__)) . $this->json_file;
         
         if (!file_exists($json_path)) {
-            error_log('Licenses JSON file not found: ' . $json_path);
+            $message = 'Licenses JSON file not found: ' . $json_path;
+            if (defined('WP_CLI') && WP_CLI) {
+                WP_CLI::error($message);
+            }
+            error_log($message);
             return false;
+        }
+
+        if (defined('WP_CLI') && WP_CLI) {
+            WP_CLI::log('Reading JSON file from: ' . $json_path);
         }
 
         $json_content = file_get_contents($json_path);
         $licenses = json_decode($json_content, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            error_log('Error parsing licenses JSON: ' . json_last_error_msg());
+            $message = 'Error parsing licenses JSON: ' . json_last_error_msg();
+            if (defined('WP_CLI') && WP_CLI) {
+                WP_CLI::error($message);
+            }
+            error_log($message);
             return false;
         }
 
-        if (get_option('licenses_populated')) {
-            return true;
+        if (defined('WP_CLI') && WP_CLI) {
+            WP_CLI::log('Found ' . count($licenses) . ' licenses to process');
         }
 
         foreach ($licenses as $license_name => $license_data) {
-            $this->create_license($license_name, $license_data);
+            if (defined('WP_CLI') && WP_CLI) {
+                WP_CLI::log('Creating license: ' . $license_name);
+            }
+            $result = $this->create_license($license_name, $license_data);
+            if (!$result && defined('WP_CLI') && WP_CLI) {
+                WP_CLI::warning('Failed to create license: ' . $license_name);
+            }
         }
 
-        update_option('licenses_populated', true);
+        if (defined('WP_CLI') && WP_CLI) {
+            WP_CLI::success('All licenses processed');
+        }
         return true;
     }
 

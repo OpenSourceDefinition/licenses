@@ -30,20 +30,40 @@ require_once plugin_dir_path(__FILE__) . 'includes/populator.php';
 // Register activation hook
 register_activation_hook(__FILE__, 'osl_activate');
 function osl_activate() {
+    // Register post type first so we can add posts
+    register_license_post_type();
+    
     // Initialize the license populator
     $populator = new License_Populator();
-    $populator->setup_and_populate();
+    $result = $populator->setup_and_populate();
     
-    // Register post type and flush rules
-    register_license_post_type();
+    // Add error logging for debugging
+    if (!$result) {
+        error_log('OSL Plugin: Failed to populate licenses during activation');
+    }
+    
+    // Flush rules after everything is set up
     flush_rewrite_rules();
 }
 
 // Add WP-CLI support
 if (defined('WP_CLI') && WP_CLI) {
     WP_CLI::add_command('licenses populate', function() {
+        WP_CLI::log('Starting license population...');
+        
+        // Verify class exists
+        if (!class_exists('License_Populator')) {
+            WP_CLI::error('License_Populator class not found');
+            return;
+        }
+        
+        WP_CLI::log('Initializing populator...');
         $populator = new License_Populator();
-        if ($populator->setup_and_populate()) {
+        
+        WP_CLI::log('Running setup and populate...');
+        $result = $populator->setup_and_populate();
+        
+        if ($result) {
             WP_CLI::success('Licenses table created and populated successfully');
         } else {
             WP_CLI::error('Failed to setup or populate licenses');
