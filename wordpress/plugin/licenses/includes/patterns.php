@@ -41,7 +41,7 @@ function get_license_table_pattern() {
     return <<<HTML
 <!-- wp:group {"layout":{"type":"default"}} -->
 <div class="wp-block-group">
-    <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":10}} -->
+    <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":250}} -->
     <div class="wp-block-query">
         <!-- wp:table {"className":"license-table"} -->
         <figure class="wp-block-table license-table">
@@ -86,7 +86,7 @@ function get_license_grid_pattern() {
     <h1 class="page-title">Open Source Licenses</h1>
     <!-- /wp:heading -->
 
-    <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":12}} -->
+    <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":250}} -->
     <div class="wp-block-query">
         <!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
             <!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30"}},"border":{"width":"1px"}},"backgroundColor":"background","layout":{"type":"flex","orientation":"vertical"}} -->
@@ -114,7 +114,7 @@ function get_license_list_pattern() {
     return <<<HTML
 <!-- wp:group {"layout":{"type":"default"}} -->
 <div class="wp-block-group">
-    <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":10}} -->
+    <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":250}} -->
     <div class="wp-block-query">
         <!-- wp:post-template -->
             <!-- wp:group {"className":"license-list-item","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
