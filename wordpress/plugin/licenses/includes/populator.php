@@ -7,6 +7,9 @@ class License_Populator {
     private $version = '1.0.0';
     
     public function setup_and_populate() {
+        // Add cleanup of existing data before populating
+        $this->cleanup_existing_data();
+        
         $result = $this->populate_licenses();
         
         if ($result) {
@@ -14,6 +17,33 @@ class License_Populator {
         }
         
         return $result;
+    }
+
+    /**
+     * Cleans up existing license data
+     */
+    private function cleanup_existing_data() {
+        // Get all license posts
+        $existing_licenses = get_posts([
+            'post_type' => 'license',
+            'numberposts' => -1,
+            'post_status' => 'any'
+        ]);
+
+        // Delete each license post (this will also delete associated meta)
+        foreach ($existing_licenses as $license) {
+            wp_delete_post($license->ID, true);
+        }
+
+        // Clean up taxonomies
+        $terms = get_terms([
+            'taxonomy' => ['license_category', 'license_tag'],
+            'hide_empty' => false,
+        ]);
+
+        foreach ($terms as $term) {
+            wp_delete_term($term->term_id, $term->taxonomy);
+        }
     }
 
     public function populate_licenses() {
@@ -154,4 +184,21 @@ class License_Populator {
             ? $category_mapping[$original_category] 
             : 'Uncategorized';
     }
+}
+
+/**
+ * Cleanup function for uninstallation
+ */
+function osl_uninstall_cleanup() {
+    // Only run cleanup if uninstall is triggered
+    if (!defined('WP_UNINSTALL_PLUGIN')) {
+        return;
+    }
+
+    // Create temporary instance to use cleanup method
+    $populator = new License_Populator();
+    $populator->cleanup_existing_data();
+
+    // Remove version option
+    delete_option('osl_db_version');
 }
