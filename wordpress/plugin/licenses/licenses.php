@@ -24,16 +24,31 @@
 
 if (!defined('ABSPATH')) exit;
 
+// Include the License Populator class
+require_once plugin_dir_path(__FILE__) . 'includes/populator.php';
+
 // Register activation hook
 register_activation_hook(__FILE__, 'osl_activate');
 function osl_activate() {
-    // Create any necessary database tables
-    // Set up plugin options/defaults
-    // Set up any necessary roles and capabilities
+    // Initialize the license populator
+    $populator = new License_Populator();
+    $populator->setup_and_populate();
     
-    // Flush rewrite rules after registering custom post type
+    // Register post type and flush rules
     register_license_post_type();
     flush_rewrite_rules();
+}
+
+// Add WP-CLI support
+if (defined('WP_CLI') && WP_CLI) {
+    WP_CLI::add_command('licenses populate', function() {
+        $populator = new License_Populator();
+        if ($populator->setup_and_populate()) {
+            WP_CLI::success('Licenses table created and populated successfully');
+        } else {
+            WP_CLI::error('Failed to setup or populate licenses');
+        }
+    });
 }
 
 // Register deactivation hook

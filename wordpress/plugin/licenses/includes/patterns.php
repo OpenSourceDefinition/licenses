@@ -25,6 +25,15 @@ function register_license_block_patterns() {
             'content'     => get_license_grid_pattern(),
         )
     );
+
+    register_block_pattern(
+        'licenses/list-view',
+        array(
+            'title'       => __('Licenses List View', 'open-source-licenses'),
+            'categories'  => array('licenses'),
+            'content'     => get_license_list_pattern(),
+        )
+    );
 }
 add_action('init', 'register_license_block_patterns');
 
@@ -85,6 +94,33 @@ function get_license_grid_pattern() {
                 <!-- wp:post-title {"level":2,"isLink":true} /-->
                 <!-- wp:post-excerpt {"showMoreOnNewLine":false} /-->
                 <!-- wp:post-terms {"term":"license_type"} /-->
+            </div>
+            <!-- /wp:group -->
+        <!-- /wp:post-template -->
+
+        <!-- wp:query-pagination -->
+            <!-- wp:query-pagination-previous /-->
+            <!-- wp:query-pagination-numbers /-->
+            <!-- wp:query-pagination-next /-->
+        <!-- /wp:query-pagination -->
+    </div>
+    <!-- /wp:query -->
+</div>
+<!-- /wp:group -->
+HTML;
+}
+
+function get_license_list_pattern() {
+    return <<<HTML
+<!-- wp:group {"layout":{"type":"constrained"}} -->
+<div class="wp-block-group">
+    <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":10}} -->
+    <div class="wp-block-query">
+        <!-- wp:post-template -->
+            <!-- wp:group {"className":"license-list-item","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
+            <div class="wp-block-group license-list-item">
+                <!-- wp:post-title {"level":3,"isLink":true} /-->
+                <!-- wp:post-excerpt {"showMoreOnNewLine":false,"excerptLength":20} /-->
             </div>
             <!-- /wp:group -->
         <!-- /wp:post-template -->
