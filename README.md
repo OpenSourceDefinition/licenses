@@ -12,6 +12,7 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+
 Simply run the script:
 ```
 python licenses.py
@@ -20,6 +21,24 @@ This will:
  - Download all license pages from opensource.org
  - Extract detailed information for each license
  - Save the results to licenses_original.json
+
+## Installation
+
+### Wordpress Plugin
+
+To install the Wordpress plugin, follow these steps:
+ - Download the plugin from the Releases page
+ - Upload Plugin from the Add New Plugin page
+ - Activate the plugin
+
+### Wordpress Theme
+
+ - Go to Licenses page to view the license categories and licenses
+ - Go to Appearance -> Editor
+ - From Templates, select Add New Template
+ - Select Archive: License
+ - Add the header, license categories, license table, grid, or list, and footer blocks
+ - Visit /licenses/ to view the license archive
 
 ## Output Format
 
