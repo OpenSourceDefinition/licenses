@@ -70,6 +70,8 @@ function register_license_post_type() {
         'publicly_queryable' => true,
         'show_ui' => true,
         'show_in_menu' => true,
+        'show_in_nav_menus' => true,
+        'show_in_rest' => true,
         'query_var' => true,
         'rewrite' => array('slug' => 'licenses'),
         'capability_type' => 'post',
@@ -119,7 +121,7 @@ function license_template_loader($template) {
     
     return $template;
 }
-add_filter('template_include', 'license_template_loader');
+#add_filter('template_include', 'license_template_loader');
 
 function license_manager_styles() {
     wp_enqueue_style(

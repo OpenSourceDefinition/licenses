@@ -1,38 +1,45 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Template for displaying license archives
+ */
+?>
 
-<div class="container">
-    <header class="page-header">
+<!-- wp:group {"layout":{"type":"constrained"}} -->
+<div class="wp-block-group">
+    <!-- wp:group {"className":"page-header"} -->
+    <div class="wp-block-group page-header">
+        <!-- wp:heading {"level":1,"className":"page-title"} -->
         <h1 class="page-title">Open Source Licenses</h1>
-    </header>
+        <!-- /wp:heading -->
+    </div>
+    <!-- /wp:group -->
 
-    <?php if (have_posts()) : ?>
-        <div class="license-grid">
-            <?php while (have_posts()) : the_post(); ?>
-                <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-                    <header class="entry-header">
-                        <h2 class="entry-title">
-                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                        </h2>
-                    </header>
+    <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":10}} -->
+    <div class="wp-block-query">
+        <!-- wp:post-template {"layout":{"type":"grid","columnCount":2},"className":"license-grid"} -->
+            <!-- wp:group {"className":"post"} -->
+            <div class="wp-block-group post">
+                <!-- wp:post-title {"level":2,"isLink":true} /-->
+                
+                <!-- wp:post-featured-image {"isLink":true,"sizeSlug":"medium"} /-->
+                
+                <!-- wp:post-excerpt /-->
+            </div>
+            <!-- /wp:group -->
+        <!-- /wp:post-template -->
 
-                    <?php if (has_post_thumbnail()) : ?>
-                        <div class="entry-thumbnail">
-                            <?php the_post_thumbnail('medium'); ?>
-                        </div>
-                    <?php endif; ?>
+        <!-- wp:query-pagination -->
+            <!-- wp:query-pagination-previous /-->
+            <!-- wp:query-pagination-numbers /-->
+            <!-- wp:query-pagination-next /-->
+        <!-- /wp:query-pagination -->
 
-                    <div class="entry-summary">
-                        <?php the_excerpt(); ?>
-                    </div>
-                </article>
-            <?php endwhile; ?>
-        </div>
-
-        <?php the_posts_pagination(); ?>
-
-    <?php else : ?>
-        <p>No licenses found.</p>
-    <?php endif; ?>
+        <!-- wp:query-no-results -->
+            <!-- wp:paragraph -->
+            <p>No licenses found.</p>
+            <!-- /wp:paragraph -->
+        <!-- /wp:query-no-results -->
+    </div>
+    <!-- /wp:query -->
 </div>
-
-<?php get_footer(); ?>
+<!-- /wp:group -->
