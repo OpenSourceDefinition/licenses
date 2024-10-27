@@ -99,31 +99,6 @@ function register_license_post_type() {
 }
 add_action('init', 'register_license_post_type');
 
-function register_license_type_taxonomy() {
-    $args = array(
-        'hierarchical'      => true,
-        'show_ui'          => true,
-        'show_admin_column' => true,
-        'show_in_rest'     => true,
-        'query_var'        => true,
-        'rewrite'          => array('slug' => 'license-type'),
-        'labels'           => array(
-            'name'              => 'License Types',
-            'singular_name'     => 'License Type',
-            'search_items'      => 'Search License Types',
-            'all_items'         => 'All License Types',
-            'edit_item'         => 'Edit License Type',
-            'update_item'       => 'Update License Type',
-            'add_new_item'      => 'Add New License Type',
-            'new_item_name'     => 'New License Type Name',
-            'menu_name'         => 'License Types'
-        )
-    );
-    
-    register_taxonomy('license_type', 'license', $args);
-}
-add_action('init', 'register_license_type_taxonomy');
-
 // Add template loading logic
 function license_template_loader($template) {
     if (is_post_type_archive('license')) {

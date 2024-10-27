@@ -5,13 +5,13 @@
 function register_license_block_patterns() {
     register_block_pattern_category(
         'licenses',
-        array('label' => __('Licenses', 'your-text-domain'))
+        array('label' => __('Licenses', 'open-source-licenses'))
     );
 
     register_block_pattern(
         'licenses/table-view',
         array(
-            'title'       => __('Licenses Table View', 'your-text-domain'),
+            'title'       => __('Licenses Table View', 'open-source-licenses'),
             'categories'  => array('licenses'),
             'content'     => get_license_table_pattern(),
         )
@@ -20,7 +20,7 @@ function register_license_block_patterns() {
     register_block_pattern(
         'licenses/grid-view',
         array(
-            'title'       => __('Licenses Grid View', 'your-text-domain'),
+            'title'       => __('Licenses Grid View', 'open-source-licenses'),
             'categories'  => array('licenses'),
             'content'     => get_license_grid_pattern(),
         )
@@ -32,10 +32,6 @@ function get_license_table_pattern() {
     return <<<HTML
 <!-- wp:group {"layout":{"type":"constrained"}} -->
 <div class="wp-block-group">
-    <!-- wp:heading {"level":1,"className":"page-title"} -->
-    <h1 class="page-title">Open Source Licenses</h1>
-    <!-- /wp:heading -->
-
     <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":10}} -->
     <div class="wp-block-query">
         <!-- wp:table {"className":"license-table"} -->
@@ -51,9 +47,9 @@ function get_license_table_pattern() {
                 <tbody>
                     <!-- wp:post-template -->
                         <tr>
-                            <td><!-- wp:post-title {"level":2,"isLink":true} /--></td>
+                            <td><!-- wp:post-title {"level":0,"isLink":true} /--></td>
                             <td><!-- wp:post-excerpt {"showMoreOnNewLine":false} /--></td>
-                            <td><!-- wp:post-terms {"term":"license_type"} /--></td>
+                            <td><!-- wp:post-terms {"term":"category"} /--></td>
                         </tr>
                     <!-- /wp:post-template -->
                 </tbody>
