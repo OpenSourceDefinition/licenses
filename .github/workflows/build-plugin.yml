@@ -25,6 +25,8 @@ jobs:
       - name: Create ZIP file
         run: |
           mkdir -p wordpress/plugin
+          # Copy all plugin files to the temporary directory
+          cp -r * wordpress/plugin/licenses/
           cd wordpress/plugin
           zip -r licenses-${{ steps.get_version.outputs.version }}.zip licenses/
       
