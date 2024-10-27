@@ -24,8 +24,9 @@
 
 if (!defined('ABSPATH')) exit;
 
-// Include the License Populator class
 require_once plugin_dir_path(__FILE__) . 'includes/populator.php';
+require_once plugin_dir_path(__FILE__) . 'includes/patterns.php';
+require_once plugin_dir_path(__FILE__) . 'includes/templates.php';
 
 // Add taxonomy registration function
 function register_license_taxonomies() {
@@ -70,11 +71,11 @@ add_action('init', 'register_license_taxonomies');
 // Register activation hook
 register_activation_hook(__FILE__, 'osl_activate');
 function osl_activate() {
-    // Register post type first
     register_license_post_type();
-    
-    // Register taxonomies
     register_license_taxonomies();
+    
+    // Clear template cache
+    wp_cache_delete('block_templates', 'block-templates');
     
     // Create default terms
     $default_categories = array(
@@ -217,5 +218,3 @@ function license_manager_styles() {
     );
 }
 add_action('wp_enqueue_scripts', 'license_manager_styles');
-
-require_once plugin_dir_path(__FILE__) . 'includes/patterns.php';
