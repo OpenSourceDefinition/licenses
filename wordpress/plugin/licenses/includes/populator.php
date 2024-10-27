@@ -92,7 +92,7 @@ class License_Populator {
 
             // Handle OSI certification tag
             if (!empty($license_data['osi_certified']) && $license_data['osi_certified'] === true) {
-                wp_set_object_terms($post_id, 'osi-certified', 'license_tag');
+                wp_set_object_terms($post_id, 'osi-certified', 'license_tag', true);
             }
         }
 
