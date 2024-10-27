@@ -132,3 +132,5 @@ function license_manager_styles() {
     );
 }
 add_action('wp_enqueue_scripts', 'license_manager_styles');
+
+require_once plugin_dir_path(__FILE__) . 'includes/patterns.php';
