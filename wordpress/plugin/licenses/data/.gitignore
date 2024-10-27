@@ -1,0 +1,2 @@
+# Ignore the licenses.json file (copied into the plugin directory during the build process)
+licenses.json
