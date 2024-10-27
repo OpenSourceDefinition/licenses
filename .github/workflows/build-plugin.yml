@@ -24,11 +24,8 @@ jobs:
       
       - name: Create ZIP file
         run: |
-          mkdir -p wordpress/plugin/licenses
-          # Copy plugin files, excluding the wordpress directory and other unnecessary files
-          rsync -av --exclude='wordpress' --exclude='.git*' . wordpress/plugin/licenses/
-          cd wordpress/plugin
-          zip -r licenses-${{ steps.get_version.outputs.version }}.zip licenses/
+          cd licenses
+          zip -r ../wordpress/plugin/licenses-${{ steps.get_version.outputs.version }}.zip .
       
       - name: Upload ZIP as artifact
         uses: actions/upload-artifact@v4
