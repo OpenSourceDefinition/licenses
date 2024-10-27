@@ -33,28 +33,36 @@ function register_license_taxonomies() {
     register_taxonomy('license_category', 'license', array(
         'hierarchical'      => true,
         'labels'           => array(
-            'name'              => _x('License Categories', 'taxonomy general name'),
-            'singular_name'     => _x('License Category', 'taxonomy singular name'),
-            'menu_name'         => __('Categories'),
+            'name'              => _x('License Categories', 'taxonomy general name', 'open-source-licenses'),
+            'singular_name'     => _x('License Category', 'taxonomy singular name', 'open-source-licenses'),
+            'menu_name'         => __('Categories', 'open-source-licenses'),
         ),
         'show_ui'           => true,
         'show_admin_column' => true,
+        'show_in_rest'      => true,
         'query_var'         => true,
-        'rewrite'           => array('slug' => 'license-category'),
+        'rewrite'           => array(
+            'slug' => 'licenses/category',
+            'with_front' => false
+        ),
     ));
 
     // Register License Tags
     register_taxonomy('license_tag', 'license', array(
         'hierarchical'      => false,
         'labels'           => array(
-            'name'              => _x('License Tags', 'taxonomy general name'),
-            'singular_name'     => _x('License Tag', 'taxonomy singular name'),
-            'menu_name'         => __('Tags'),
+            'name'              => _x('License Tags', 'taxonomy general name', 'open-source-licenses'),
+            'singular_name'     => _x('License Tag', 'taxonomy singular name', 'open-source-licenses'),
+            'menu_name'         => __('Tags', 'open-source-licenses'),
         ),
         'show_ui'           => true,
         'show_admin_column' => true,
+        'show_in_rest'      => true,
         'query_var'         => true,
-        'rewrite'           => array('slug' => 'license-tag'),
+        'rewrite'           => array(
+            'slug' => 'licenses/tag',
+            'with_front' => false
+        ),
     ));
 }
 add_action('init', 'register_license_taxonomies');

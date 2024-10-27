@@ -48,11 +48,18 @@ function register_license_block_patterns() {
 add_action('init', 'register_license_block_patterns');
 
 function get_license_table_pattern() {
-    $args = array(
-        'post_type' => 'license',
-        'posts_per_page' => 250,
-    );
-    $licenses = get_posts($args);
+    global $wp_query;
+    
+    // Use the main query if we're on a taxonomy page, otherwise create a new query
+    if (is_tax('license_category')) {
+        $licenses = $wp_query->posts;
+    } else {
+        $args = array(
+            'post_type' => 'license',
+            'posts_per_page' => 250,
+        );
+        $licenses = get_posts($args);
+    }
     
     $rows = '';
     foreach ($licenses as $license) {
@@ -101,11 +108,18 @@ HTML;
 }
 
 function get_license_grid_pattern() {
-    $args = array(
-        'post_type' => 'license',
-        'posts_per_page' => 250,
-    );
-    $licenses = get_posts($args);
+    global $wp_query;
+    
+    // Use the main query if we're on a taxonomy page, otherwise create a new query
+    if (is_tax('license_category')) {
+        $licenses = $wp_query->posts;
+    } else {
+        $args = array(
+            'post_type' => 'license',
+            'posts_per_page' => 250,
+        );
+        $licenses = get_posts($args);
+    }
     
     $cards = '';
     foreach ($licenses as $license) {
@@ -149,10 +163,11 @@ HTML;
 }
 
 function get_license_list_pattern() {
+    // This pattern uses wp:query block which automatically handles taxonomy pages
     return <<<HTML
 <!-- wp:group {"layout":{"type":"constrained"}} -->
 <div class="wp-block-group">
-    <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":250,"inherit":false}} -->
+    <!-- wp:query {"queryId":1,"query":{"postType":"license","perPage":250,"inherit":true}} -->
     <div class="wp-block-query">
         <!-- wp:post-template {"layout":{"type":"default"}} -->
         <!-- wp:group {"className":"license-list-item","layout":{"type":"flex","flexWrap":"nowrap"}} -->
@@ -182,12 +197,23 @@ function get_license_categories_pattern() {
         'hide_empty' => true,
     ));
     
-    $category_items = '';
+    $archive_url = get_post_type_archive_link('license');
+    $category_items = <<<HTML
+    <!-- wp:button {"className":"license-category-button"} -->
+    <div class="wp-block-button license-category-button">
+        <a href="{$archive_url}" class="wp-block-button__link wp-element-button">All Licenses</a>
+    </div>
+    <!-- /wp:button -->
+    HTML;
+    
     foreach ($categories as $category) {
+        $category_url = get_term_link($category, 'license_category');
+        if (is_wp_error($category_url)) continue;
+        
         $category_items .= <<<HTML
         <!-- wp:button {"className":"license-category-button"} -->
         <div class="wp-block-button license-category-button">
-            <a href="?license_category={$category->slug}" class="wp-block-button__link wp-element-button">{$category->name}</a>
+            <a href="{$category_url}" class="wp-block-button__link wp-element-button">{$category->name}</a>
         </div>
         <!-- /wp:button -->
         HTML;
