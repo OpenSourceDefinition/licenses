@@ -1,5 +1,13 @@
 <?php
 /**
+ * Open Source Licenses (OSL)
+ *
+ * @package     OpenSourceLicenses
+ * @author      Sam Johnston
+ * @copyright   2024 Sam Johnston
+ * @license     MIT
+ *
+ * @wordpress-plugin
  * Plugin Name: Open Source Licenses (OSL)
  * Plugin URI: https://github.com/OpenSourceDefinition/licenses
  * Description: Manages Open Source Licenses (OSL) that comply with the Open Source Definition (OSD)
@@ -11,6 +19,7 @@
  * Requires at least: 5.0
  * Requires PHP: 7.2
  * License: MIT
+ * License URI: https://opensource.org/licenses/MIT
  */
 
 if (!defined('ABSPATH')) exit;
