@@ -19,7 +19,7 @@ jobs:
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
           else
-            echo "version=dev" >> $GITHUB_OUTPUT
+            echo "version=dev-$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
           fi
       
       - name: Create ZIP file
