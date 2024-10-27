@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Add permissions block here
+    permissions:
+      contents: write
     
     steps:
       - uses: actions/checkout@v4
