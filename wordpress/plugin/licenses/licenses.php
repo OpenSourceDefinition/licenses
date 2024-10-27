@@ -24,6 +24,45 @@
 
 if (!defined('ABSPATH')) exit;
 
+// Register activation hook
+register_activation_hook(__FILE__, 'osl_activate');
+function osl_activate() {
+    // Create any necessary database tables
+    // Set up plugin options/defaults
+    // Set up any necessary roles and capabilities
+    
+    // Flush rewrite rules after registering custom post type
+    register_license_post_type();
+    flush_rewrite_rules();
+}
+
+// Register deactivation hook
+register_deactivation_hook(__FILE__, 'osl_deactivate');
+function osl_deactivate() {
+    // Clean up temporary data
+    // Remove plugin-specific capabilities if needed
+    
+    // Flush rewrite rules
+    flush_rewrite_rules();
+}
+
+// Register uninstall hook (must be in main plugin file)
+register_uninstall_hook(__FILE__, 'osl_uninstall');
+function osl_uninstall() {
+    // Remove all plugin-related data from database
+    // Remove custom post types and their posts
+    // Remove plugin options
+    
+    // Example: Delete all license posts
+    $licenses = get_posts(array('post_type' => 'license', 'numberposts' => -1));
+    foreach ($licenses as $license) {
+        wp_delete_post($license->ID, true);
+    }
+    
+    // Clean up any plugin options
+    delete_option('osl_plugin_options');
+}
+
 // Register Custom Post Type
 function register_license_post_type() {
     $args = array(
