@@ -148,10 +148,6 @@ function get_license_grid_pattern() {
     return <<<HTML
 <!-- wp:group {"layout":{"type":"constrained"}} -->
 <div class="wp-block-group">
-    <!-- wp:heading {"level":1,"className":"page-title"} -->
-    <h1 class="wp-block-heading page-title">Open Source Licenses</h1>
-    <!-- /wp:heading -->
-
     <!-- wp:group {"className":"license-grid","layout":{"type":"grid","minimumColumnWidth":"300px"}} -->
     <div class="wp-block-group license-grid">
         {$cards}
